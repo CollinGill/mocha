@@ -16,9 +16,9 @@ const var_name: var_type = var_value;
 ```
 
 ## Arithmetic Operators
-    - ```+```: Addition
-    - ```-```: Subtraction
-    - ```*```: Multiplication
-    - ```/```: Division
-    - ```%```: Modulo
-    - ```**```: Exponential
+    - +: Addition
+    - -: Subtraction
+    - *: Multiplication
+    - /: Division
+    - %: Modulo
+    - **: Exponential

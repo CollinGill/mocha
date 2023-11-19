@@ -25,7 +25,4 @@ Compiling a Mocha file
 
 ```bash
 $ ./mocha file_name.moc [OPTIONS]
-
 ```
-
-## Language Description
