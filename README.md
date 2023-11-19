@@ -16,16 +16,12 @@
 
 ## Building and Compiling
 
-Building
-
+Building Mocha
 ```bash
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
+$ cargo build --release
 ```
 
-Compiling a file
+Compiling a Mocha file
 
 ```bash
 $ ./mocha file_name.moc [OPTIONS]
