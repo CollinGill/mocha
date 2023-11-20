@@ -1,4 +1,8 @@
+mod scanner;
+mod token;
+
 use std::env;
+use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -9,5 +13,8 @@ fn main() {
         println!("{}", usage);
     }
 
-    let src_code = &args[1];
+    let file_name = &args[1];
+    let contents = fs::read_to_string(file_name)
+                                 .expect("Should have been able to read the file");
+
 }
