@@ -1,5 +1,6 @@
 mod scanner;
 mod token;
+mod grammar;
 
 use std::env;
 use std::fs;
@@ -23,8 +24,15 @@ fn main() {
     let mut scanner_ = Scanner {
         src_code: contents,
         tokens: Vec::new(),
-        index: 0
+        index: 0,
+        line: 1,
+        col: 1
     };
 
     scanner_.tokenize();
+    for tok in scanner_.tokens.iter() {
+        tok.print_token();
+        println!();
+    }
+
 }
