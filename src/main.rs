@@ -3,6 +3,7 @@ mod token;
 
 use std::env;
 use std::fs;
+use crate::scanner::Scanner;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -13,8 +14,17 @@ fn main() {
         println!("{}", usage);
     }
 
-    let file_name = &args[1];
-    let contents = fs::read_to_string(file_name)
-                                 .expect("Should have been able to read the file");
+    let file_name: &String = &args[1];
+    let contents: Vec<char> = fs::read_to_string(file_name)
+                                    .expect("Failed to read input")
+                                    .chars()
+                                    .collect();
 
+    let mut scanner_ = Scanner {
+        src_code: contents,
+        tokens: Vec::new(),
+        index: 0
+    };
+
+    scanner_.tokenize();
 }

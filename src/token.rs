@@ -5,6 +5,9 @@ pub struct Token {
     pub value: String
 }
 
-pub fn print_token(token: Token) {
-    print!("<{}, {}>", token.type_, token.value);
+impl Token {
+    fn print_token(token: Token) {
+        print!("<{}, {}>", token.type_, token.value);
+    }
+
 }
