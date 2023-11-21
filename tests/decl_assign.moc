@@ -4,5 +4,7 @@ func main() => void {
 
 	const message: string = "Hello, world!\n";
 
+	const char_test: char = 'h';
+
 	return;
 }

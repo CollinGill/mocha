@@ -1,3 +1,4 @@
+use std::process::exit;
 use crate::token::Token;
 
 pub struct Scanner {
@@ -303,6 +304,7 @@ impl Scanner {
                                         {
                                             eprintln!("ERROR: Invalid syntax\nLine: {}\nCol: {}",
                                                       self.line, self.col);
+                                            exit(1);
                                         }
 
                                         has_radix = true;
@@ -382,6 +384,50 @@ impl Scanner {
                         self.col += token_len;
                         buf.clear();
                     }
+
+                    else if cur_ == '\''
+                    {
+                        buf.push(cur_);
+                        self.consume(1);
+
+                        loop {
+                            match self.peek(0) {
+                                Some(cur) => {
+                                    buf.push(cur);
+                                    self.consume(1);
+                                    if cur == '\''
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                None => {break;}
+                            }
+                        }
+
+                        let token_value: String = buf.iter().collect();
+                        let token_len: usize = token_value.len();
+
+                        if token_len != 3
+                        {
+                            eprintln!("ERROR: Not a valid char literal\nLine: {}\nCol: {}",
+                                      self.line, self.col);
+                            exit(1);
+                        }
+
+                        let tok = Token {
+                            line: self.line,
+                            col: self.col,
+                            type_: String::from("CHAR-LIT"),
+                            value: String::from(token_value)
+                        };
+
+                        self.tokens.push(tok);
+                        self.col += token_len;
+                        buf.clear();
+
+                    }
+
 
                     else
                     {
