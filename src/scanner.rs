@@ -142,7 +142,8 @@ impl Scanner {
                         let tok:  Token;
                         match self.peek(1) {
                             Some(ch) => {
-                                if ch == '>' {
+                                if ch == '>'
+                                {
                                     tok = Token {
                                         line: self.line,
                                         col: self.col,
@@ -152,7 +153,23 @@ impl Scanner {
                                     self.col += 2;
                                     self.consume(2);
 
-                                } else {
+                                }
+
+                                else if ch == '='
+                                {
+                                    tok = Token {
+                                        line: self.line,
+                                        col: self.col,
+                                        type_: String::from("COMP_OPERATOR"),
+                                        value: String::from("==")
+                                    };
+                                    self.col += 2;
+                                    self.consume(2);
+
+                                }
+
+                                else
+                                {
                                     tok = Token {
                                         line: self.line,
                                         col: self.col,
@@ -179,6 +196,146 @@ impl Scanner {
 
                         self.tokens.push(tok);
 
+                    }
+
+                    // Simple operators
+                    // TODO: Support for increment and += type of operators
+                    else if cur_ == '+'
+                        || cur_ == '-'
+                        || cur_ == '*'
+                        || cur_ == '/'
+                    {
+                        let tok = Token {
+                            line: self.line,
+                            col: self.col,
+                            type_: String::from("ARITH-OPERATOR"),
+                            value: String::from(cur_)
+                        };
+
+                        self.tokens.push(tok);
+                        self.consume(1);
+                    }
+
+                    else if cur_ == '>'
+                    {
+                        let tok: Token;
+                        match self.peek(1) {
+                            Some(sec) => {
+                                if sec == '='
+                                {
+                                    tok = Token {
+                                        line: self.line,
+                                        col: self.col,
+                                        type_: String::from("COMP_OPERATOR"),
+                                        value: String::from(">=")
+                                    };
+                                    self.consume(2);
+                                    self.col += 2;
+                                }
+
+                                else {
+                                    tok = Token {
+                                        line: self.line,
+                                        col: self.col,
+                                        type_: String::from("COMP_OPERATOR"),
+                                        value: String::from(">")
+                                    };
+                                    self.consume(1);
+                                    self.col += 1;
+                                }
+
+                                self.tokens.push(tok);
+                            }
+
+                            None => {
+                                tok = Token {
+                                    line: self.line,
+                                    col: self.col,
+                                    type_: String::from("COMP_OPERATOR"),
+                                    value: String::from(">")
+                                };
+                                self.consume(1);
+                                self.col += 1;
+                                self.tokens.push(tok);
+                            }
+                        }
+                    }
+
+                    else if cur_ == '<'
+                    {
+                        let tok: Token;
+                        match self.peek(1) {
+                            Some(sec) => {
+                                if sec == '='
+                                {
+                                    tok = Token {
+                                        line: self.line,
+                                        col: self.col,
+                                        type_: String::from("COMP_OPERATOR"),
+                                        value: String::from("<=")
+                                    };
+                                    self.consume(2);
+                                    self.col += 2;
+                                }
+
+                                else {
+                                    tok = Token {
+                                        line: self.line,
+                                        col: self.col,
+                                        type_: String::from("COMP_OPERATOR"),
+                                        value: String::from("<")
+                                    };
+                                    self.consume(1);
+                                    self.col += 1;
+                                }
+
+                                self.tokens.push(tok);
+                            }
+
+                            None => {
+                                tok = Token {
+                                    line: self.line,
+                                    col: self.col,
+                                    type_: String::from("COMP_OPERATOR"),
+                                    value: String::from("<")
+                                };
+                                self.consume(1);
+                                self.col += 1;
+                                self.tokens.push(tok);
+                            }
+                        }
+                    }
+
+                    else if cur_ == '!'
+                    {
+                        let tok: Token;
+                        match self.peek(1) {
+                            Some(sec) => {
+                                if sec == '='
+                                {
+                                    tok = Token {
+                                        line: self.line,
+                                        col: self.col,
+                                        type_: String::from("COMP_OPERATOR"),
+                                        value: String::from("!=")
+                                    };
+                                    self.consume(2);
+                                    self.col += 2;
+                                    self.tokens.push(tok);
+                                }
+
+                                else {
+                                    eprintln!("ERROR: Invalid syntax\nLine: {}\nCol: {}", self.line, self.col);
+                                    exit(1)
+                                }
+
+                            }
+
+                            None => {
+                                eprintln!("ERROR: Invalid syntax\nLine: {}\nCol: {}", self.line, self.col);
+                                exit(1)
+                            }
+                        }
                     }
 
                     // Identifiers and keywords
@@ -257,6 +414,7 @@ impl Scanner {
                             || token_name == "float"
                             || token_name == "string"
                             || token_name == "char"
+                            || token_name == "bool"
                         {
                             tok = Token {
                                 line: self.line,
@@ -266,6 +424,52 @@ impl Scanner {
                             };
                             self.tokens.push(tok);
 
+                        }
+
+                        else if token_name == "true" || token_name == "false"
+                        {
+                            tok = Token {
+                                line: self.line,
+                                col: self.col,
+                                type_: String::from("BOOL-LIT"),
+                                value: String::from(token_name)
+                            };
+                            self.tokens.push(tok);
+                        }
+
+                        else if token_name == "and"
+                            || token_name == "or"
+                            || token_name == "not"
+                        {
+                            tok = Token {
+                                line: self.line,
+                                col: self.col,
+                                type_: String::from("LOGIC_OPERATOR"),
+                                value: String::from(token_name)
+                            };
+                            self.tokens.push(tok);
+                        }
+
+                        else if token_name == "if"
+                        {
+                            tok = Token {
+                                line: self.line,
+                                col: self.col,
+                                type_: String::from("IF"),
+                                value: String::from("if")
+                            };
+                            self.tokens.push(tok);
+                        }
+
+                        else if token_name == "else"
+                        {
+                            tok = Token {
+                                line: self.line,
+                                col: self.col,
+                                type_: String::from("ELSE"),
+                                value: String::from("else")
+                            };
+                            self.tokens.push(tok);
                         }
 
                         else
@@ -312,40 +516,40 @@ impl Scanner {
                                         self.consume(1);
                                     }
 
-                                    else {break;}
+                                    else { break; }
                                 }
 
-                                None => {break;}
+                                None => { break; }
                             }
-
-                            let token_value: String = buf.iter().collect();
-                            let token_len: usize = token_value.len();
-                            let tok: Token;
-
-                            if has_radix
-                            {
-                                tok = Token {
-                                    line:  self.line,
-                                    col: self.col,
-                                    type_: String::from("FLOAT-LIT"),
-                                    value: token_value
-                                };
-                            }
-
-                            else
-                            {
-                                tok = Token {
-                                    line:  self.line,
-                                    col: self.col,
-                                    type_: String::from("INT-LIT"),
-                                    value: token_value
-                                };
-                            }
-
-                            self.tokens.push(tok);
-                            self.col += token_len;
-                            buf.clear();
                         }
+
+                        let token_value: String = buf.iter().collect();
+                        let token_len: usize = token_value.len();
+                        let tok: Token;
+
+                        if has_radix
+                        {
+                            tok = Token {
+                                line:  self.line,
+                                col: self.col,
+                                type_: String::from("FLOAT-LIT"),
+                                value: token_value
+                            };
+                        }
+
+                        else
+                        {
+                            tok = Token {
+                                line:  self.line,
+                                col: self.col,
+                                type_: String::from("INT-LIT"),
+                                value: token_value
+                            };
+                        }
+
+                        self.tokens.push(tok);
+                        self.col += token_len;
+                        buf.clear();
 
                     }
 
@@ -385,6 +589,7 @@ impl Scanner {
                         buf.clear();
                     }
 
+                    // Char literals
                     else if cur_ == '\''
                     {
                         buf.push(cur_);
@@ -431,9 +636,8 @@ impl Scanner {
 
                     else
                     {
-                        // Placeholder
-                        self.col += 1;
-                        self.consume(1);
+                        eprintln!("ERROR: Invalid syntax\nLine: {}\nCol: {}", self.line, self.col);
+                        exit(1);
                     }
                 }
             }

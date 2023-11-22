@@ -6,5 +6,7 @@ func main() => void {
 
 	const char_test: char = 'h';
 
+	var is_fish: bool = not (true and false) or false;
+
 	return;
 }

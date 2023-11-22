@@ -1,0 +1,7 @@
+func main() => void {
+	var expr: int;
+
+	expr = (5 + 2) * 7;
+
+	return;
+}

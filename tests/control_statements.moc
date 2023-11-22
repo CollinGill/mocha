@@ -1,0 +1,17 @@
+func main() => void 
+{
+	var age: float => 18.5;
+	var can_drive:bool;
+
+	if (age > 16) {
+		can_drive = true;
+
+	} else if (age == 16) {
+	    can_drive = true;
+
+	} else {
+		can_drive = false;
+	}
+
+	return;
+}
