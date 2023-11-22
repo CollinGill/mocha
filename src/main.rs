@@ -1,6 +1,6 @@
 mod scanner;
 mod token;
-mod grammar;
+mod parser;
 
 use std::env;
 use std::fs;
