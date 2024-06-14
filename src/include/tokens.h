@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 #include <stdint.h>
 #include <string>
@@ -15,7 +16,7 @@ namespace token
     class Token
     {
     public:
-        Token();
+        Token(Token_Type type, std::string value, uint64_t row, uint64_t col);
         ~Token();
 
         void set_type(Token_Type type);
@@ -28,6 +29,8 @@ namespace token
         uint64_t get_row();
         uint64_t get_col();
 
+        void print();
+
     private:
         Token_Type type;
         std::string value;
@@ -35,4 +38,8 @@ namespace token
         uint64_t col;
     };
 
-} // namespace name
+    std::unique_ptr<Token> create_token(Token_Type type, std::string value, uint64_t row, uint64_t col);
+
+    std::string type_to_string(Token_Type type);
+
+} // token
