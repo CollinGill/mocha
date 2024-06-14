@@ -18,7 +18,10 @@
 
 Building Mocha
 ```bash
-$ cargo build --release
+$ mkdir build
+$ cd build
+$ cmake ../
+$ make
 ```
 
 Compiling a Mocha file
