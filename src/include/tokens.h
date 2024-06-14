@@ -11,6 +11,29 @@ namespace token
     {
         LPAREN,
         RPAREN,
+        IDENTIFIER,
+        INT_LIT,
+        FLOAT_LIT,
+        STRING_LIT,
+        CHAR_LIT,
+        SEMI,
+        COLON,
+        LBRACKET,
+        RBRACKET,
+        FUNC,
+        ARROW,
+        RETURN,
+        EQU,
+        TYPE,
+        VAR,
+        CONST,
+        PLUS,
+        MINUS,
+        MULT,
+        DIV,
+        MOD,
+        EXP
+
     };
 
     class Token

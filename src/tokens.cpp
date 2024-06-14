@@ -77,6 +77,72 @@ string token::type_to_string(Token_Type type)
 
     case RPAREN:
         return "RPAREN";
+        
+    case IDENTIFIER:
+        return "IDENTIFIER";
+
+    case INT_LIT:
+        return "INT_LIT";
+
+    case FLOAT_LIT:
+        return "FLOAT_LIT";
+
+    case STRING_LIT:
+        return "STRING_LIT";
+
+    case CHAR_LIT:
+        return "CHAR_LIT";
+
+    case SEMI:
+        return "SEMI";
+
+    case COLON:
+        return "COLON";
+
+    case LBRACKET:
+        return "LBRACKET";
+
+    case RBRACKET:
+        return "RBRACKET";
+
+    case FUNC:
+        return "FUNC";
+
+    case ARROW:
+        return "ARROW";
+
+    case RETURN:
+        return "RETURN";
+
+    case EQU:
+        return "EQU";
+
+    case TYPE:
+        return "TYPE";
+
+    case VAR:
+        return "VAR";
+
+    case CONST:
+        return "CONST";
+
+    case PLUS:
+        return "PLUS";
+
+    case MINUS:
+        return "MINUS";
+
+    case MULT:
+        return "MULT";
+
+    case DIV:
+        return "DIV";
+
+    case MOD:
+        return "MOD";
+
+    case EXP:
+        return "EXP";
 
     default:
         return "ERROR: INVALID TYPE";
