@@ -11,12 +11,21 @@ Token::Token(Token_Type type, std::string value, uint64_t row, uint64_t col)
     this->set_col(col);
 }
 
+std::unordered_map<Token_Type, std::string> tok_type_to_string = {
+    {LPAREN, "LPAREN"},         {RPAREN, "RPAREN"},     {IDENTIFIER, "IDENTIFIER"}, {INT_LIT, "INT_LIT"},
+    {FLOAT_LIT, "FLOAT_LIT"},   {CHAR_LIT, "CHAR_LIT"}, {SEMI, "SEMI"},             {COLON, "COLON"},
+    {LBRACKET, "LBRACKET"},     {RBRACKET, "RBRACKET"}, {FUNC, "FUNC"},             {ARROW, "ARROW"},
+    {RETURN, "RETURN"},         {EQU, "EQU"},           {TYPE, "TYPE"},             {VAR, "VAR"},
+    {CONST, "CONST"},           {PLUS, "PLUS"},         {MINUS, "MINUS"},           {MULT, "MULT"},
+    {DIV, "DIV"},               {MOD, "MOD"},           {EXP, "EXP"}
+};
+
 Token::~Token() {}
 
 // Public methods
 void Token::print()
 {
-    cout << "<" << type_to_string(this->type) << ", " << this->value << ">";
+    cout << "<" << tok_type_to_string[this->type] << ", " << this->value << ">";
 }
 
 // Getters and Setters
@@ -68,83 +77,3 @@ unique_ptr<Token> create_token(Token_Type type, string value, uint64_t row, uint
     return new_tok;
 }
 
-string token::type_to_string(Token_Type type)
-{
-    switch (type)
-    {
-    case LPAREN:
-        return "LPAREN";
-
-    case RPAREN:
-        return "RPAREN";
-        
-    case IDENTIFIER:
-        return "IDENTIFIER";
-
-    case INT_LIT:
-        return "INT_LIT";
-
-    case FLOAT_LIT:
-        return "FLOAT_LIT";
-
-    case STRING_LIT:
-        return "STRING_LIT";
-
-    case CHAR_LIT:
-        return "CHAR_LIT";
-
-    case SEMI:
-        return "SEMI";
-
-    case COLON:
-        return "COLON";
-
-    case LBRACKET:
-        return "LBRACKET";
-
-    case RBRACKET:
-        return "RBRACKET";
-
-    case FUNC:
-        return "FUNC";
-
-    case ARROW:
-        return "ARROW";
-
-    case RETURN:
-        return "RETURN";
-
-    case EQU:
-        return "EQU";
-
-    case TYPE:
-        return "TYPE";
-
-    case VAR:
-        return "VAR";
-
-    case CONST:
-        return "CONST";
-
-    case PLUS:
-        return "PLUS";
-
-    case MINUS:
-        return "MINUS";
-
-    case MULT:
-        return "MULT";
-
-    case DIV:
-        return "DIV";
-
-    case MOD:
-        return "MOD";
-
-    case EXP:
-        return "EXP";
-
-    default:
-        return "ERROR: INVALID TYPE";
-    }
-}
