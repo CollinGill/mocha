@@ -8,6 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_COMPILER_FLAGS}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../")
 
 include_directories("src/include/*.h")
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB SOURCES "src/*.cc")
 
 add_executable(mocha ${SOURCES})

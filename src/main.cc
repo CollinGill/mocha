@@ -1,5 +1,7 @@
+#include <filesystem>
 #include <iostream>
-#include <string>
+
+#include "include/io.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,10 +11,21 @@ int main(int argc, char *argv[])
     }
 
     std::string file_name = std::string(argv[1]);
-    if (!file_name.ends_with(".mocha")) {
+    if (!file_name.ends_with(".moc")) {
         std::cerr << "ERROR: " << file_name << " is not a valid Mocha file\n";
         return 1;
     }
+
+    if (!std::filesystem::exists(file_name)) {
+        std::cerr << "ERROR: " << file_name << " does not exist\n";
+        return 1;
+    }
+
+    Io io;
+
+    io.read_file(file_name);
+
+    std::cout << io.get_file_contents() << '\n';
 
     return 0;
 }
