@@ -2,7 +2,7 @@
 
 ## Goals
 
-- [ ] Scanner
+- [x] Scanner
 - [ ] Parser
   - [ ] Syntax verification
   - [ ] Type checking
