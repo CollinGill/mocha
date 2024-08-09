@@ -1,15 +1,19 @@
 #pragma once
 
+#include <array>
 #include <iostream>
 #include <memory>
 #include <unordered_map>  
 #include <stdint.h>
 #include <string>
 
+#define TOKEN_AMOUNT 24
+
 namespace token
 {
     enum Token_Type
     {
+        NONE,
         LPAREN,
         RPAREN,
         IDENTIFIER,
@@ -34,13 +38,22 @@ namespace token
         DIV,
         MOD,
         EXP
+    };
 
+    const std::array<std::string, TOKEN_AMOUNT>tok_type_to_string = {
+        "NONE",     "LPAREN",       "RPAREN",   "IDENTIFIER",
+        "INT_LIT",  "FLOAT_LIT",    "CHAR_LIT", "SEMI",
+        "COLON",    "LBRACKET",     "RBRACKET", "FUNC",
+        "ARROW",    "RETURN",       "EQU",      "TYPE",
+        "VAR",      "CONST",        "PLUS",     "MINUS",
+        "MULT",     "DIV",          "MOD",      "EXP"
     };
 
     class Token
     {
     public:
         Token(Token_Type type, std::string value, uint64_t row, uint64_t col);
+        Token();
         ~Token();
 
         void set_type(Token_Type type);

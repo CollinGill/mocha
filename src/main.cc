@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "include/io.h"
+#include "include/lexer.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,10 +23,13 @@ int main(int argc, char *argv[])
     }
 
     Io io;
+    lexer::Lexer lex;
 
     io.read_file(file_name);
+    std::cout << io.get_file_contents() << "\n";
 
-    std::cout << io.get_file_contents() << '\n';
+    lex.lex_file(io.get_file_contents());
+    lex.print_token_list();
 
     return 0;
 }
