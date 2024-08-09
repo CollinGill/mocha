@@ -11,9 +11,12 @@ namespace lexer {
     const std::unordered_set<char> whitespace = {
         ' ', '\n', '\t'
     };
+
+    const std::unordered_set<char> arithmetic_op = {
+        '+', '-', '*', '/'
+    };
     
-    class Lexer 
-    {
+    class Lexer {
     public:
         Lexer();
 
@@ -41,7 +44,7 @@ namespace lexer {
         token::Token eat_paren();
         token::Token eat_bracket();
         token::Token eat_numeric();
-        void eat_arithmetic();
+        token::Token eat_arithmetic();
         void eat_ident();
     };
 }

@@ -3,8 +3,7 @@
 
 using namespace lexer;
 
-Lexer::Lexer()
-{
+Lexer::Lexer() {
     this->file_index = 0;
     this->token_list = std::vector<token::Token>();
     this->row = 1;
@@ -12,8 +11,7 @@ Lexer::Lexer()
     this->file_size = 0;
 }
 
-void Lexer::lex_file(const std::string& file_contents)
-{
+void Lexer::lex_file(const std::string& file_contents) {
     this->file_contents = file_contents;
     this->file_size = file_contents.length();
 
@@ -94,19 +92,21 @@ void Lexer::lex_file(const std::string& file_contents)
 
             this->token_list.push_back(this->eat_numeric());
 
+        } else if (arithmetic_op.find(current_char) != arithmetic_op.end()) {
+            this->token_list.push_back(this->eat_arithmetic());
+
+
         } else {
             this->eat_ident();
         }
     }
 }
 
-std::vector<token::Token> Lexer::get_token_list()
-{
+std::vector<token::Token> Lexer::get_token_list() {
     return this->token_list;
 }
 
-void Lexer::print_token_list()
-{
+void Lexer::print_token_list() {
     std::cout << "TOKEN LIST\n";
     for (token::Token& token : this->token_list) {
         std::cout << "\t";
@@ -115,8 +115,7 @@ void Lexer::print_token_list()
     }
 }
 
-char Lexer::cur_char()
-{
+char Lexer::cur_char() {
     if (this->file_index >= this->file_size) {
         return '\0';
     }
@@ -125,8 +124,7 @@ char Lexer::cur_char()
 
 }
 
-char Lexer::peek()
-{
+char Lexer::peek() {
     if (this->file_index + 1 >= this->file_size) {
         return '\0';
     }
@@ -134,22 +132,22 @@ char Lexer::peek()
     return this->file_contents[this->file_index + 1];
 }
 
-void Lexer::eat_char()
-{
+void Lexer::eat_char() {
     this->file_index++;
     this->col++;
 }
 
-void Lexer::eat_whitespace()
-{
+void Lexer::eat_whitespace() {
     switch (this->cur_char()) {
         case ' ':
             this->col++;
             break;
+
         case '\n':
             this->row++;
             this->col = 1;
             break;
+
         case '\t':
             this->col += 4;
             break;
@@ -158,11 +156,10 @@ void Lexer::eat_whitespace()
             break;
     }
 
-    this->eat_char();
+    this->file_index++;
 }
 
-token::Token Lexer::eat_string_lit()
-{
+token::Token Lexer::eat_string_lit() {
     // TODO: Add support for escape characters
 
     int row_start = this->row, col_start = this->col;
@@ -185,8 +182,7 @@ token::Token Lexer::eat_string_lit()
     return token::Token();
 }
 
-token::Token Lexer::eat_paren()
-{
+token::Token Lexer::eat_paren() {
     token::Token new_tok;
 
     if (this->cur_char() == '(') {
@@ -206,8 +202,7 @@ token::Token Lexer::eat_paren()
     return new_tok;
 }
 
-token::Token Lexer::eat_bracket()
-{
+token::Token Lexer::eat_bracket() {
     token::Token new_tok;
 
     if (this->cur_char() == '{') {
@@ -227,8 +222,7 @@ token::Token Lexer::eat_bracket()
     return new_tok;
 }
 
-token::Token Lexer::eat_numeric()
-{
+token::Token Lexer::eat_numeric() {
     token::Token new_token;
     new_token.set_row(this->row);
     new_token.set_col(this->col);
@@ -263,12 +257,41 @@ token::Token Lexer::eat_numeric()
     return new_token;
 }
 
-void Lexer::eat_arithmetic()
-{
+token::Token Lexer::eat_arithmetic() {
+    token::Token new_tok;
 
+    new_tok.set_row(this->row);
+    new_tok.set_col(this->col);
+
+    switch (this->cur_char()) {
+        case '+':
+            new_tok.set_type(token::PLUS);
+            new_tok.set_value("+");
+            break;
+
+        case '-':
+            new_tok.set_type(token::MINUS);
+            new_tok.set_value("-");
+            break;
+
+        case '*':
+            new_tok.set_type(token::MULT);
+            new_tok.set_value("*");
+            break;
+
+        case '/':
+            new_tok.set_type(token::DIV);
+            new_tok.set_value("/");
+            break;
+
+        default:
+            break;
+    }
+
+    this->eat_char();
+    return new_tok; 
 }
 
-void Lexer::eat_ident()
-{
+void Lexer::eat_ident() {
     this->eat_char();
 }
