@@ -10,6 +10,7 @@ Lexer::Lexer()
     this->row = 1;
     this->col = 1;
     this->file_size = 0;
+    this->tab_width = 8;
 }
 
 void Lexer::lex_file(const std::string& file_contents)
@@ -151,14 +152,14 @@ void Lexer::eat_whitespace()
             this->col = 1;
             break;
         case '\t':
-            this->col += 4;
+            this->col += this->tab_width;
             break;
 
         default:
             break;
     }
 
-    this->eat_char();
+    this->file_index++;
 }
 
 token::Token Lexer::eat_string_lit()

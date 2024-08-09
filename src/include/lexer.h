@@ -31,6 +31,7 @@ namespace lexer {
         int file_index;
         int row;
         int col;
+        int tab_width;
 
         char cur_char();
 
