@@ -9,7 +9,6 @@ Lexer::Lexer() {
     this->row = 1;
     this->col = 1;
     this->file_size = 0;
-    this->tab_width = 8;
 }
 
 void Lexer::lex_file(const std::string& file_contents) {
@@ -59,7 +58,8 @@ void Lexer::lex_file(const std::string& file_contents) {
 
             } else if (this->peek() == '=') {
                 new_tok.set_type(token::EQU);
-                new_tok.set_value("=");
+                new_tok.set_value("==");
+                this->eat_char();
 
             } else {
                 new_tok.set_type(token::ASSIGN);
@@ -187,7 +187,7 @@ void Lexer::eat_whitespace() {
             break;
 
         case '\t':
-            this->col += this->tab_width;
+            this->col += 4;
             break;
 
         default:

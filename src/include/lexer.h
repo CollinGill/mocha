@@ -21,7 +21,8 @@ namespace lexer {
         {"float", token::TYPE},     {"string", token::TYPE},    {"var", token::VAR},
         {"const", token::CONST},    {"and", token::AND},        {"or", token::OR},
         {"not", token::NOT},        {"xor", token::XOR},        {"bool", token::TYPE},
-        {"void", token::TYPE},      {"true", token::BOOL_LIT},  {"false", token::BOOL_LIT}
+        {"void", token::TYPE},      {"true", token::BOOL_LIT},  {"false", token::BOOL_LIT},
+        {"if", token::IF},          {"else", token::ELSE}
     };
 
     class Lexer {

@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <string>
 
-#define TOKEN_AMOUNT 34
+#define TOKEN_AMOUNT 36
 
 namespace token
 {
@@ -46,7 +46,9 @@ namespace token
         GT,
         GE,
         LE,
-        LT
+        LT,
+        IF,
+        ELSE
     };
 
     const std::array<std::string, TOKEN_AMOUNT>tok_type_to_string = {
@@ -58,7 +60,7 @@ namespace token
         "MINUS",    "MULT",         "DIV",          "MOD",      \
         "EXP",      "AND",          "OR",           "NOT",
         "XOR",      "ASSIGN",       "GT",           "GE",
-        "LE",       "LT"
+        "LE",       "LT",           "IF",           "ELSE"
     };
 
     class Token
