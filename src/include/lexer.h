@@ -15,7 +15,15 @@ namespace lexer {
     const std::unordered_set<char> arithmetic_op = {
         '+', '-', '*', '/'
     };
-    
+
+    const std::unordered_map<std::string, token::Token_Type> reserved_idents = {
+        {"func", token::FUNC},      {"return", token::RETURN},  {"int", token::TYPE},
+        {"float", token::TYPE},     {"string", token::TYPE},    {"var", token::VAR},
+        {"const", token::CONST},    {"and", token::AND},        {"or", token::OR},
+        {"not", token::NOT},        {"xor", token::XOR},        {"bool", token::TYPE},
+        {"void", token::TYPE},      {"true", token::BOOL_LIT},  {"false", token::BOOL_LIT}
+    };
+
     class Lexer {
     public:
         Lexer();
@@ -45,6 +53,6 @@ namespace lexer {
         token::Token eat_bracket();
         token::Token eat_numeric();
         token::Token eat_arithmetic();
-        void eat_ident();
+        token::Token eat_ident();
     };
 }
