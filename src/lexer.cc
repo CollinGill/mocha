@@ -130,7 +130,19 @@ void Lexer::lex_file(const std::string& file_contents) {
             this->token_list.push_back(this->eat_numeric());
 
         } else if (arithmetic_op.find(current_char) != arithmetic_op.end()) {
-            this->token_list.push_back(this->eat_arithmetic());
+            if (current_char == '/' && this->peek() == '/') {
+                while (this->file_index < this->file_size) {
+                    if (this->cur_char() == '\n') {
+                        this->eat_whitespace();
+                        break;
+                    }
+                    this->eat_char();
+                }
+
+            } else {
+                this->token_list.push_back(this->eat_arithmetic());
+
+            }
 
 
         } else {

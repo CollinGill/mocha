@@ -2,9 +2,8 @@ func main() => void {
 	var fish: int;
 	fish = 5;
 
+	// This is a placeholder single-line comment
 	const message: string = "Hello, world!\n";
-
-	const char_test: char = 'h';
 
 	is_fish: bool = not (true and false) or false;
 
