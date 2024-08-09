@@ -32,12 +32,15 @@ namespace lexer {
         int row;
         int col;
 
+        char cur_char();
+
         char peek();
         void eat_char();
         void eat_whitespace();
         token::Token eat_string_lit();
         token::Token eat_paren();
-        void eat_numeric();
+        token::Token eat_bracket();
+        token::Token eat_numeric();
         void eat_arithmetic();
         void eat_ident();
     };

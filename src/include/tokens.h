@@ -7,13 +7,13 @@
 #include <stdint.h>
 #include <string>
 
-#define TOKEN_AMOUNT 24
+#define TOKEN_AMOUNT 25
 
 namespace token
 {
     enum Token_Type
     {
-        NONE,
+        NONE=0,
         LPAREN,
         RPAREN,
         IDENTIFIER,
@@ -41,12 +41,13 @@ namespace token
     };
 
     const std::array<std::string, TOKEN_AMOUNT>tok_type_to_string = {
-        "NONE",     "LPAREN",       "RPAREN",   "IDENTIFIER",
-        "INT_LIT",  "FLOAT_LIT",    "CHAR_LIT", "SEMI",
-        "COLON",    "LBRACKET",     "RBRACKET", "FUNC",
-        "ARROW",    "RETURN",       "EQU",      "TYPE",
-        "VAR",      "CONST",        "PLUS",     "MINUS",
-        "MULT",     "DIV",          "MOD",      "EXP"
+        "NONE",     "LPAREN",       "RPAREN",       "IDENTIFIER",
+        "INT_LIT",  "FLOAT_LIT",    "STRING_LIT",   "CHAR_LIT",
+        "SEMI",     "COLON",        "LBRACKET",     "RBRACKET",
+        "FUNC",     "ARROW",        "RETURN",       "EQU",
+        "TYPE",     "VAR",          "CONST",        "PLUS",
+        "MINUS",    "MULT",         "DIV",          "MOD",      \
+        "EXP"
     };
 
     class Token

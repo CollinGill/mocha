@@ -24,8 +24,9 @@ void Lexer::lex_file(const std::string& file_contents)
     // For those remaining characters, eat_ident()
 
     char current_char;
+    token::Token new_tok;
     while (this->file_index < this->file_size) {
-        current_char = this->file_contents[this->file_index];
+        current_char = this->cur_char(); 
 
         if (whitespace.find(current_char) != whitespace.end()) {
             this->eat_whitespace();
@@ -40,11 +41,58 @@ void Lexer::lex_file(const std::string& file_contents)
                 exit(1);
                 break;
             }
-
             this->token_list.push_back(new_tok);
 
         } else if (current_char == '(' || current_char == ')') {
             this->token_list.push_back(this->eat_paren());
+
+        } else if (current_char == '{' || current_char == '}') {
+            this->token_list.push_back(this->eat_bracket());
+
+        } else if (current_char == '=') {
+            new_tok.set_row(this->row);
+            new_tok.set_col(this->col);
+
+            if (this->peek() == '>') {
+                new_tok.set_type(token::ARROW);
+                new_tok.set_value("=>");
+                this->eat_char();
+
+            } else {
+                new_tok.set_type(token::EQU);
+                new_tok.set_value("=");
+
+            }
+
+            this->token_list.push_back(new_tok);
+            this->eat_char();
+
+        } else if (current_char == ';') {
+            new_tok.set_type(token::SEMI);
+            new_tok.set_value(";");
+            new_tok.set_row(this->row);
+            new_tok.set_col(this->col);
+
+            this->token_list.push_back(new_tok);
+            this->eat_char();
+
+        } else if (current_char == ':') {
+            new_tok.set_type(token::COLON);
+            new_tok.set_value(":");
+            new_tok.set_row(this->row);
+            new_tok.set_col(this->col);
+
+            this->token_list.push_back(new_tok);
+            this->eat_char();
+
+        } else if (isdigit(current_char) || current_char == '.') {
+            if (current_char == '.' && !isdigit(this->peek())) {
+                std::cout << "ERROR: Invalid float at (" << this->row << ", " << this->col << ")\n";
+                exit(1);
+                break;
+            }
+
+            this->token_list.push_back(this->eat_numeric());
 
         } else {
             this->eat_ident();
@@ -67,6 +115,16 @@ void Lexer::print_token_list()
     }
 }
 
+char Lexer::cur_char()
+{
+    if (this->file_index >= this->file_size) {
+        return '\0';
+    }
+
+    return this->file_contents[this->file_index];
+
+}
+
 char Lexer::peek()
 {
     if (this->file_index + 1 >= this->file_size) {
@@ -84,10 +142,7 @@ void Lexer::eat_char()
 
 void Lexer::eat_whitespace()
 {
-    char current_char = this->file_contents[this->file_index];
-    this->file_index++;
-
-    switch (current_char) {
+    switch (this->cur_char()) {
         case ' ':
             this->col++;
             break;
@@ -102,6 +157,8 @@ void Lexer::eat_whitespace()
         default:
             break;
     }
+
+    this->eat_char();
 }
 
 token::Token Lexer::eat_string_lit()
@@ -112,7 +169,7 @@ token::Token Lexer::eat_string_lit()
     int index_start = this->file_index;
 
     while (this->file_index < this->file_size) {
-        if (this->file_contents[this->file_index] == '"' && this->file_index != index_start) {
+        if (this->cur_char() == '"' && this->file_index != index_start) {
             token::Token new_token = token::Token(
                 token::STRING_LIT, this->file_contents.substr(index_start, this->file_index - index_start + 1), 
                 row_start, col_start
@@ -132,7 +189,7 @@ token::Token Lexer::eat_paren()
 {
     token::Token new_tok;
 
-    if (this->file_contents[this->file_index] == '(') {
+    if (this->cur_char() == '(') {
         new_tok.set_type(token::LPAREN);
         new_tok.set_value("(");
 
@@ -149,9 +206,61 @@ token::Token Lexer::eat_paren()
     return new_tok;
 }
 
-void Lexer::eat_numeric()
+token::Token Lexer::eat_bracket()
 {
+    token::Token new_tok;
 
+    if (this->cur_char() == '{') {
+        new_tok.set_type(token::LBRACKET);
+        new_tok.set_value("{");
+
+    } else {
+        new_tok.set_type(token::RBRACKET);
+        new_tok.set_value("}");
+
+    }
+
+    new_tok.set_row(this->row);
+    new_tok.set_col(this->col);
+
+    this->eat_char();
+    return new_tok;
+}
+
+token::Token Lexer::eat_numeric()
+{
+    token::Token new_token;
+    new_token.set_row(this->row);
+    new_token.set_col(this->col);
+    int start = this->file_index;
+
+    int decimal_count = 0;
+
+    while (this->file_index < this->file_size) {
+        if (this->cur_char() == '.') {
+            this->eat_char();
+            decimal_count++;
+            if (decimal_count > 1) {
+                return new_token;
+            }
+        } else if (isdigit(this->cur_char())) {
+            this->eat_char();
+
+        } else {
+            if (decimal_count > 0) {
+                new_token.set_type(token::FLOAT_LIT);
+
+            } else {
+                new_token.set_type(token::INT_LIT);
+
+            }
+
+            new_token.set_value(this->file_contents.substr(start, this->file_index - start));
+            break;
+        }
+    }
+
+    return new_token;
 }
 
 void Lexer::eat_arithmetic()
