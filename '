@@ -9,7 +9,6 @@ Lexer::Lexer() {
     this->row = 1;
     this->col = 1;
     this->file_size = 0;
-    this->tab_width = 8;
 }
 
 void Lexer::lex_file(const std::string& file_contents) {
@@ -57,12 +56,8 @@ void Lexer::lex_file(const std::string& file_contents) {
                 new_tok.set_value("=>");
                 this->eat_char();
 
-            } else if (this->peek() == '=') {
-                new_tok.set_type(token::EQU);
-                new_tok.set_value("=");
-
             } else {
-                new_tok.set_type(token::ASSIGN);
+                new_tok.set_type(token::EQU);
                 new_tok.set_value("=");
 
             }
@@ -88,38 +83,6 @@ void Lexer::lex_file(const std::string& file_contents) {
             this->token_list.push_back(new_tok);
             this->eat_char();
 
-        } else if(current_char == '<') {
-            new_tok.set_row(this->row);
-            new_tok.set_col(this->col);
-
-            if (this->peek() == '=') {
-                new_tok.set_type(token::LE);
-                new_tok.set_value("<=");
-                this->eat_char();
-            } else {
-                new_tok.set_type(token::LT);
-                new_tok.set_value("<");
-            }
-
-            this->eat_char();
-            this->token_list.push_back(new_tok);
-
-        } else if(current_char == '>') {
-            new_tok.set_row(this->row);
-            new_tok.set_col(this->col);
-
-            if (this->peek() == '=') {
-                new_tok.set_type(token::GE);
-                new_tok.set_value(">=");
-                this->eat_char();
-            } else {
-                new_tok.set_type(token::GT);
-                new_tok.set_value(">");
-            }
-
-            this->eat_char();
-            this->token_list.push_back(new_tok);
-
         } else if (isdigit(current_char) || current_char == '.') {
             if (current_char == '.' && !isdigit(this->peek())) {
                 std::cout << "ERROR: Invalid float at (" << this->row << ", " << this->col << ")\n";
@@ -134,8 +97,7 @@ void Lexer::lex_file(const std::string& file_contents) {
 
 
         } else {
-            this->token_list.push_back(this->eat_ident());
-
+            this->eat_ident();
         }
     }
 }
@@ -187,7 +149,7 @@ void Lexer::eat_whitespace() {
             break;
 
         case '\t':
-            this->col += this->tab_width;
+            this->col += 4;
             break;
 
         default:
@@ -345,11 +307,8 @@ token::Token Lexer::eat_ident() {
         new_tok.set_type(reserved_idents.at(cur_substr));
 
     } else {
-        new_tok.set_type(token::IDENTIFIER);
 
     }
-
-    new_tok.set_value(cur_substr);
 
     return new_tok;
 }
